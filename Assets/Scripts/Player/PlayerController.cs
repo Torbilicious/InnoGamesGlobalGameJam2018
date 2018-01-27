@@ -45,11 +45,13 @@ namespace Assets.Scripts
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 movementSpeed = movementSpeed / 2;
+                noiseArea.noiseIntensity = noiseArea.noiseIntensity / 2;
             }
 
             if (Input.GetKeyUp(KeyCode.LeftShift))
             {
                 movementSpeed = movementSpeed * 2;
+                noiseArea.noiseIntensity = noiseArea.noiseIntensity * 2;
             }
 
             if (Input.GetButton("Jump") && isGrounded())
@@ -69,15 +71,7 @@ namespace Assets.Scripts
 
         private void OnCollisionEnter(Collision collision)
         {
-            //if (collision.gameObject.CompareTag("Ground"))
-            //{
-            //if(noiseArea.gameObject.name != noiseArea.name)
-           
                 noiseArea.transform.localScale += new Vector3(0.1F, 0.1F, 0.1F) * noiseArea.noiseIntensity;
-            
-                Debug.Log(noiseArea.gameObject.name);
-
-            //}
         }
 
         public void spawn()
