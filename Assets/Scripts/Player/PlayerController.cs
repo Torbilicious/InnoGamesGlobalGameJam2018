@@ -49,8 +49,8 @@ namespace Assets.Scripts
                 spawn();
             }
 
-            var x = Input.GetAxis("Horizontal") * Time.deltaTime * movementSpeed;
-            var y = Input.GetAxis("Vertical") * Time.deltaTime * movementSpeed / 2;
+            var x = CrossPlatformInputManager.GetAxis("Horizontal") * Time.deltaTime * movementSpeed;
+            var y = CrossPlatformInputManager.GetAxis("Vertical") * Time.deltaTime * movementSpeed / 2;
             
             if (isOnLadder)
             {
