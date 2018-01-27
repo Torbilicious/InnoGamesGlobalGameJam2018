@@ -12,6 +12,8 @@ namespace Assets.Scripts
         public float noiseReductionSpeed = 0.7f;
         public float noiseBaseRange = 2.0f;
 
+        private float noiseLevel = 1.0f;
+
         public float movementSpeed;
         public Vector3 jump;
         public float deathBarrierY = -40.0f;
@@ -74,7 +76,6 @@ namespace Assets.Scripts
                     //noiseArea.transform.localScale -= new Vector3(noiseReductionSpeed, noiseReductionSpeed, noiseReductionSpeed);
                     noiseArea.transform.localScale *= noiseReductionSpeed;
                 }
-                Debug.Log(noiseArea.transform.localScale.x);
             }
 
 
@@ -90,8 +91,33 @@ namespace Assets.Scripts
 
         private void OnCollisionEnter(Collision collision)
         {
-            Debug.Log(noiseArea.transform.localScale);
-                noiseArea.transform.localScale += new Vector3(noiseBaseRange, noiseBaseRange, noiseBaseRange) * noiseArea.noiseIntensity * collision.impulse.magnitude;
+            var colProps = collision.gameObject.GetComponent<CollisionProperties>();
+            if(colProps != null)
+            {
+                noiseLevel = colProps.noiselevel;
+                Debug.Log(colProps.noiselevel);
+            }
+            else
+            {
+                noiseLevel = 1.0f;
+            }
+
+            applyNoise(collision.impulse.magnitude);
+              //  noiseArea.transform.localScale += new Vector3(noiseBaseRange, noiseBaseRange, noiseBaseRange) * noiseArea.noiseIntensity * collision.impulse.magnitude * noiseLevel;
+        }
+
+        private void OnCollisionStay(Collision collision)
+        {
+            var colProps = collision.gameObject.GetComponent<CollisionProperties>();
+         
+            if (colProps != null && colProps.walkNoise)
+            {
+
+                Debug.Log(collision.relativeVelocity.magnitude);
+                applyNoise(collision.relativeVelocity.magnitude*100);
+     
+            }
+            
         }
 
         public void spawn()
@@ -103,6 +129,11 @@ namespace Assets.Scripts
         public void die()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        private void applyNoise (float magnitude)
+        {
+            noiseArea.transform.localScale += new Vector3(noiseBaseRange, noiseBaseRange, noiseBaseRange) * noiseArea.noiseIntensity * magnitude * noiseLevel;
         }
     }
 }
