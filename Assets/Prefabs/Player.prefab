@@ -23,7 +23,6 @@ GameObject:
   - component: {fileID: 136782132189025826}
   - component: {fileID: 23753551791322970}
   - component: {fileID: 54409470012674350}
-  - component: {fileID: 136297908776047312}
   - component: {fileID: 114448789455957072}
   m_Layer: 0
   m_Name: Player
@@ -39,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1012152265956586}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.59, y: 1, z: 0}
+  m_LocalPosition: {x: -1.13, y: 8.11, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
@@ -114,21 +113,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 2.5
   jump: {x: 0, y: 0, z: 0}
-  jumpForce: 2
-  isGrounded: 0
---- !u!136 &136297908776047312
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1012152265956586}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  jumpForce: 1
+  deathBarrierY: -40
 --- !u!136 &136782132189025826
 CapsuleCollider:
   m_ObjectHideFlags: 1
