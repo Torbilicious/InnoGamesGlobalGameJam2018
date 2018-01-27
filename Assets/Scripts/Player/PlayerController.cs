@@ -27,7 +27,7 @@ namespace Assets.Scripts
         private bool lastDirection = false;
         private bool isSneaking = false;
         private bool isGrounded = false;
-
+        private bool isOnLadder = false;
 
         void Start()
         {
@@ -124,10 +124,11 @@ namespace Assets.Scripts
 
         void OnTriggerEnter(Collider other)
         {
-            if (!other.gameObject != this.gameObject)
+            if (other.gameObject.CompareTag("Ground"))
             {
                 isGrounded = true;
             }
+            
             
             if (other.gameObject.CompareTag("Item"))
             {
@@ -137,15 +138,29 @@ namespace Assets.Scripts
 
         private void OnTriggerStay(Collider other)
         {
-            if (!other.gameObject != this.gameObject)
+            if (other.gameObject.CompareTag("Ground"))
             {
                 isGrounded = true;
+            }
+
+            if (other.gameObject.CompareTag("Ladder"))
+            {
+                isOnLadder = true;
             }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            isGrounded = false;
+            if (other.gameObject.CompareTag("Ground"))
+            {
+                isGrounded = false;
+            }
+
+            
+            if (other.gameObject.CompareTag("Ladder"))
+            {
+                isOnLadder = false;
+            }
         }
 
         private void OnCollisionEnter(Collision collision)
