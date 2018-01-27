@@ -192,6 +192,8 @@ MonoBehaviour:
   deathBarrierY: -40
   animator: {fileID: 95559370977310000}
   jumpForce: 2
+  stone: {fileID: 4135932514082548, guid: a10e7e67fc9ed7f4588f9ab406780a57, type: 2}
+  throwRange: 8
 --- !u!114 &114658325220970980
 MonoBehaviour:
   m_ObjectHideFlags: 1

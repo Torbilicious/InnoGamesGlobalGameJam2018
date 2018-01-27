@@ -27,6 +27,9 @@ namespace Assets.Scripts
         private bool isGrounded = false;
         private bool isOnLadder = false;
 
+        public Transform stone;
+        public float throwRange = 8.0f;
+
         private float mass = 0;
 
         void Start()
@@ -118,6 +121,14 @@ namespace Assets.Scripts
             }
             
             transform.Translate(x, y, 0);
+
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                Debug.Log("test");
+                var temp = Instantiate(stone, new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
+
+                temp.GetComponent<Rigidbody>().AddForce(throwRange, throwRange/2, 0, ForceMode.Impulse);
+            }
         }
 
         void OnTriggerEnter(Collider other)
