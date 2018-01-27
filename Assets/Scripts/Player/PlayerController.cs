@@ -15,10 +15,15 @@ namespace Assets.Scripts
         public float movementSpeed;
         public Vector3 jump;
         public float deathBarrierY = -40.0f;
+
+        public Animator animator;
     
         public float jumpForce = 2.0f;
         private float distToGround;
         private Rigidbody rb;
+
+        private bool lastDirection = false;
+        private bool isSneaking = false;
 
 
         void Start()
@@ -45,16 +50,44 @@ namespace Assets.Scripts
             var x = Input.GetAxis("Horizontal") * Time.deltaTime * movementSpeed;
             transform.Translate(x, 0, 0);
 
+            //Animation
+            if (Math.Abs(x) > 0)
+            {
+                if (isSneaking)
+                {
+                    animator.Play("Player_Sneaking"); //TODO: Animation fehlt noch
+                }
+                else
+                {
+                    animator.Play("Player_Walking");
+                }
+                
+                bool direction = x < 0;
+                if (lastDirection != direction)
+                {
+                    Vector3 scale = transform.localScale;
+                    scale.x *= -1;
+                    transform.localScale = scale;
+                    lastDirection = direction;
+                }
+            }
+            else
+            {
+                animator.Play("Player_Right");
+            }
+
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 movementSpeed = movementSpeed / 2;
                 noiseArea.noiseIntensity = noiseArea.noiseIntensity / 2;
+                isSneaking = true;
             }
 
             if (Input.GetKeyUp(KeyCode.LeftShift))
             {
                 movementSpeed = movementSpeed * 2;
                 noiseArea.noiseIntensity = noiseArea.noiseIntensity * 2;
+                isSneaking = false;
 
             }
             if (Input.GetButton("Jump") && isGrounded())
