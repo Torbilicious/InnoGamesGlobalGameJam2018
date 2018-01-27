@@ -138,7 +138,7 @@ namespace Assets.Scripts.Player
             var temp = Instantiate(stone,
                 new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
 
-            temp.GetComponent<Rigidbody>().AddForce(throwRange, throwRange / 2, 0, ForceMode.Impulse);
+            temp.GetComponent<Rigidbody>().AddForce(direction == Direction.LEFT ? -throwRange : throwRange, throwRange / 2, 0, ForceMode.Impulse);
         }
 
         private void Jump()
