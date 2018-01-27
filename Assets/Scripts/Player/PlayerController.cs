@@ -53,7 +53,11 @@ namespace Assets.Scripts
             transform.Translate(x, 0, 0);
 
             //Animation
-            if (Math.Abs(x) > 0)
+            if (!isGrounded())
+            {
+                animator.Play("Player_Jump");
+            }
+            else if (Math.Abs(x) > 0)
             {
                 if (isSneaking)
                 {
@@ -75,7 +79,14 @@ namespace Assets.Scripts
             }
             else
             {
-                animator.Play("Player_Right");
+                if (isSneaking)
+                {
+                    animator.Play("Player_Duck");
+                }
+                else
+                {
+                    animator.Play("Player_Right");
+                }  
             }
 
             if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -110,8 +121,6 @@ namespace Assets.Scripts
                     noiseArea.transform.localScale *= noiseReductionSpeed;
                 }
             }
-
-
         }
 
         void OnTriggerEnter(Collider other)
