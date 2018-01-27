@@ -29,6 +29,8 @@ namespace Assets.Scripts
         private bool isGrounded = false;
         private bool isOnLadder = false;
 
+        private float mass = 0;
+
         void Start()
         {
             distToGround = GetComponent<Collider>().bounds.extents.y;
@@ -47,10 +49,19 @@ namespace Assets.Scripts
             }
 
             var x = Input.GetAxis("Horizontal") * Time.deltaTime * movementSpeed;
-            transform.Translate(x, 0, 0);
+            var y = Input.GetAxis("Vertical") * Time.deltaTime * movementSpeed / 2;
+            
+            if (isOnLadder)
+            {
+                rb.Sleep();
+            }
+            else
+            {
+                y = 0;
+            }
 
             //Animation
-            if (!isGrounded)
+            if (!isGrounded && !isOnLadder)
             {
                 animator.Play("Player_Jump");
             }
@@ -120,6 +131,8 @@ namespace Assets.Scripts
                     noiseArea.transform.localScale *= noiseReductionSpeed;
                 }
             }
+            
+            transform.Translate(x, y, 0);
         }
 
         void OnTriggerEnter(Collider other)
@@ -128,7 +141,6 @@ namespace Assets.Scripts
             {
                 isGrounded = true;
             }
-            
             
             if (other.gameObject.CompareTag("Item"))
             {
@@ -145,6 +157,7 @@ namespace Assets.Scripts
 
             if (other.gameObject.CompareTag("Ladder"))
             {
+                Debug.Log("LADDER");
                 isOnLadder = true;
             }
         }
@@ -188,6 +201,7 @@ namespace Assets.Scripts
                     applyNoise(Math.Abs(Input.GetAxis("Horizontal")));
 
             }
+            
         }
 
         public void spawn()
