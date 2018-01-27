@@ -37,7 +37,7 @@ namespace Assets.Scripts.Player
 
         public Transform stone;
         public float throwRange = 8.0f;
-        private int countStones;
+        public int countStones;
 
         private float mass = 0;
 
@@ -228,11 +228,9 @@ namespace Assets.Scripts.Player
             }
 
             if (other.gameObject.CompareTag("Item"))
-            {
-                               
+            {      
                 if (countStones < 3)
                 {
-
                     other.gameObject.SetActive(false);
                     countStones = countStones + 1;
                 }
