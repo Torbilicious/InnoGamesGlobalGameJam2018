@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class LamplightController : MonoBehaviour
 {
-	public Rigidbody enemy;
-
+	public Rigidbody enemyBody;
+	public EnemyController enemy;
+	
+	public bool hasColl = false;
+	
 	// Use this for initialization
 	void Start () {
 		
@@ -15,10 +18,14 @@ public class LamplightController : MonoBehaviour
 	void Update () {
 		
 	}
-	
+
+	private void OnTriggerExit(Collider other)
+	{
+		hasColl = false;
+	}
+
 	private void OnTriggerStay(Collider other)
 	{
-//		Destroy(other.gameObject);
-		Debug.Log("Collision with lamplight");
+		hasColl = true;
 	}
 }

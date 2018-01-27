@@ -181,7 +181,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91b39ab16dc8f47d596cac5fd4b5b246, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy: {fileID: 0}
+  enemyBody: {fileID: 0}
+  enemy: {fileID: 114715416150759766}
+  hasColl: 0
 --- !u!114 &114715416150759766
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -193,6 +195,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd3c818794036495d918ef65ba7b9282, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lampLight: {fileID: 114639897876782992}
+  isDead: 0
 --- !u!136 &136735829044635218
 CapsuleCollider:
   m_ObjectHideFlags: 1

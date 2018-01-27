@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void respawn()
+    public void respawn()
     {
         var spawn = FindObjectOfType<SpawnController>();
         transform.position = spawn.transform.position;
