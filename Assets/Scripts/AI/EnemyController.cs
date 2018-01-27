@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 using Assets.Scripts.Player;
 using UnityEngine;
 
@@ -13,11 +14,17 @@ namespace Assets.Scripts.AI
 		
 		public bool isDead = false;
 		public float baseSpeed = 1.0f;
-	
+
+		public float spawnPosX = 0.0f;
+		
+		public bool followNoise = false;
+		public float followPosX = 0.0f;
+		public int followTimeout = 0;
 	
 		// Use this for initialization
 		void Start () {
 			animator.Play("Enemy_Idle");
+			spawnPosX = transform.position.x;
 		}
 	
 		// Update is called once per frame
@@ -30,17 +37,36 @@ namespace Assets.Scripts.AI
 				return; // don't do anything if the enemy is dead
 			}
 		
-			if (lampLight.hasColl)
+			if (lampLight.hasColl || followNoise || followTimeout > 0)
 			{
+				if (followTimeout > 0)
+				{
+					--followTimeout;
+					if (followTimeout == 0)
+					{
+						followNoise = true;
+						followPosX = spawnPosX;
+					}
+				}
+				
+				if (lampLight.hasColl)
+				{
+					followNoise = false;
+					updatePlayerPos();
+				}
+
 				animator.Play("Enemy_Walking");
-				FollowPlayer();
-			}
-			else
-			{
+				FollowPos(followPosX);
+			} else {
 				animator.Play("Enemy_Idle");
 			}
 		}
 
+		void updatePlayerPos()
+		{
+			followPosX = FindObjectOfType<PlayerController>().transform.position.x;
+		}
+		
 		void UpdateDead()
 		{
 			//Destroy(gameObject);
@@ -54,16 +80,29 @@ namespace Assets.Scripts.AI
 			transform.Translate(new Vector3(0.0f, 0.0f, -0.2f));
 		}
 	
-		void FollowPlayer()
+		void FollowPos(float posX)
 		{
 			float lightSizeX = lampLight.GetComponent<Collider>().bounds.size.x;
-			float distance = Mathf.Abs(transform.position.x - FindObjectOfType<PlayerController>().transform.position.x);
+			float distance = Mathf.Abs((float)transform.position.x - posX);
 			float distanceNorm = Mathf.Clamp(1.0f - (distance / lightSizeX), 0.0f, 1.0f);
+			
+			if (followNoise)
+			{
+				distanceNorm = 0.25f;
+			}
 			
 			float realSpeed = baseSpeed * distanceNorm;
 			
 			transform.Translate(new Vector3(realSpeed, 0.0f, 0.0f));
 			animator.speed = (Math.Max(0.1f, distanceNorm)) * 4.0f;
+
+			if (distance <= 0.001)
+			{
+				followNoise = false;
+				
+				if(spawnPosX != followPosX)
+					followTimeout = 60 * 2;
+			}
 		}
 	
 		void OnCollisionEnter(Collision other)
@@ -78,6 +117,15 @@ namespace Assets.Scripts.AI
 				} else {
 					Die();
 				}
+			}
+		}
+
+		private void OnTriggerEnter(Collider other)
+		{
+			if (other.gameObject.CompareTag("NoiseArea"))
+			{
+				updatePlayerPos();
+				followNoise = true;
 			}
 		}
 	}
