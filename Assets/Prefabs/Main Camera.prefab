@@ -97,9 +97,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 155f911dd548545899fe5b32c21cd5f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCamera: {fileID: 20683057454870330}
-  playerBody: {fileID: 0}
   camSmoothVal: 0.25
+  posOffset: {x: 0, y: -1.2, z: 0}
 --- !u!124 &124268455379583674
 Behaviour:
   m_ObjectHideFlags: 1

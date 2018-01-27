@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Assets.Scripts.AI
 {
@@ -9,8 +10,6 @@ namespace Assets.Scripts.AI
 		public bool isDead = false;
 		public float baseSpeed = 1.0f;
 	
-		private const int deadAnimTimeTotal = 60; // total time the death animation takes
-		private int deadAnimTime = 0; // current death animation time
 	
 		// Use this for initialization
 		void Start () {
@@ -20,6 +19,7 @@ namespace Assets.Scripts.AI
 		// Update is called once per frame
 		void Update ()
 		{
+			// can be re-used if a death animation is used
 			if (isDead) 
 			{
 				UpdateDead();
@@ -34,23 +34,15 @@ namespace Assets.Scripts.AI
 
 		void UpdateDead()
 		{
-			if (deadAnimTime > 0)
-			{
-				--deadAnimTime;
-				float deadTimerNormal = ((float) deadAnimTime / (float) deadAnimTimeTotal);
-				transform.localScale *= deadTimerNormal;
-			}
-			else
-			{
-				Destroy(gameObject);
-			}
+			//Destroy(gameObject);
 		}
 		
 		void Die()
 		{
 			isDead = true;
-			deadAnimTime = deadAnimTimeTotal;
-			GetComponent<Collider>().enabled = false;
+			GetComponent<Collider>().isTrigger = true;
+			GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+			transform.Translate(new Vector3(0.0f, 0.0f, -0.2f));
 		}
 	
 		void FollowPlayer()
