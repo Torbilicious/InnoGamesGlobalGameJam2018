@@ -43,7 +43,7 @@ namespace Assets.Scripts
         {
             if (transform.position.y < deathBarrierY)
             {
-                spawn();
+                die();
             }
 
             var x = CrossPlatformInputManager.GetAxis("Horizontal") * Time.deltaTime * movementSpeed;
