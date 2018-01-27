@@ -21,12 +21,18 @@ namespace Assets.Scripts.AI
 
 		private void OnTriggerExit(Collider other)
 		{
-			hasColl = false;
+			if (other.gameObject.CompareTag("Player"))
+			{
+				hasColl = false;
+			}
 		}
 
 		private void OnTriggerStay(Collider other)
 		{
-			hasColl = true;
+			if (other.gameObject.CompareTag("Player"))
+			{
+				hasColl = true;
+			}
 		}
 	}
 }
