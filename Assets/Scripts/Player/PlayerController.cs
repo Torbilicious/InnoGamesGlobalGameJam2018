@@ -22,6 +22,7 @@ namespace Assets.Scripts
         private float distToGround;
         private Rigidbody rb;
 
+        private bool isLanded = false;
         private bool lastDirection = false;
         private bool isSneaking = false;
         private bool isGrounded = false;
@@ -37,10 +38,21 @@ namespace Assets.Scripts
             jump = new Vector3(0.0f, 2.0f, 0.0f);
 
             spawn();
+            
+            animator.Play("Player_Fall");
         }
 
         void Update()
         {
+            if (!isLanded && !isGrounded)
+            {
+                return;
+            }
+            else
+            {
+                isLanded = true;
+            }
+            
             if (transform.position.y < deathBarrierY)
             {
                 die();
