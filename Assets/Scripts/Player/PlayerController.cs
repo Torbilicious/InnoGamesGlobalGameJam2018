@@ -9,9 +9,6 @@ namespace Assets.Scripts
     {
         public NoiseController noiseArea;
 
-        public float noiseReductionSpeed = 0.7f;
-        public float noiseBaseRange = 2.0f;
-
         private float noiseLevel = 1.0f;
 
         public float movementSpeed;
@@ -108,18 +105,6 @@ namespace Assets.Scripts
                 isGrounded = false;
             }
 
-            if(noiseArea.transform.localScale.x > 0.5)
-            {
-                if(noiseArea.transform.localScale.x < 0.5 )
-                {
-                    return;
-                }
-                else
-                {
-                    //noiseArea.transform.localScale -= new Vector3(noiseReductionSpeed, noiseReductionSpeed, noiseReductionSpeed);
-                    noiseArea.transform.localScale *= noiseReductionSpeed;
-                }
-            }
         }
 
         void OnTriggerEnter(Collider other)
@@ -150,18 +135,17 @@ namespace Assets.Scripts
 
         private void OnCollisionEnter(Collision collision)
         {
-    var colProps = collision.gameObject.GetComponent<CollisionProperties>();
+            var colProps = collision.gameObject.GetComponent<CollisionProperties>();
             if(colProps != null)
             {
-                noiseLevel = colProps.noiselevel;        Debug.Log(colProps.noiselevel);
+                noiseLevel = colProps.noiselevel;     
             }
             else
             {
                 noiseLevel = 1.0f;
             }
 
-            applyNoise(collision.impulse.magnitude);
-              //  noiseArea.transform.localScale += new Vector3(noiseBaseRange, noiseBaseRange, noiseBaseRange) * noiseArea.noiseIntensity * collision.impulse.magnitude* noiseLevel;
+            noiseArea.applyNoise(collision.impulse.magnitude * noiseLevel);
         }
 
         private void OnCollisionStay(Collision collision)
@@ -170,7 +154,7 @@ namespace Assets.Scripts
             if (colProps != null)
             {
               
-                    applyNoise(Math.Abs(Input.GetAxis("Horizontal")));
+                    noiseArea.applyNoise(Math.Abs(Input.GetAxis("Horizontal")));
 
             }
         }
@@ -186,9 +170,5 @@ namespace Assets.Scripts
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
-        private void applyNoise (float magnitude)
-        {
-            noiseArea.transform.localScale += new Vector3(noiseBaseRange, noiseBaseRange, noiseBaseRange) * noiseArea.noiseIntensity * magnitude * noiseLevel;
-        }
     }
 }
