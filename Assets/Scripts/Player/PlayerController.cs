@@ -9,8 +9,8 @@ namespace Assets.Scripts
     {
         public NoiseController noiseArea;
 
-        private float noiseReductionSpeed = 0.9f;
-        private float noiseBaseRange = 2.0f;
+        public float noiseReductionSpeed = 0.7f;
+        public float noiseBaseRange = 2.0f;
 
         public float movementSpeed;
         public Vector3 jump;
@@ -71,7 +71,8 @@ namespace Assets.Scripts
                 }
                 else
                 {
-                    noiseArea.transform.localScale -= new Vector3(noiseReductionSpeed, noiseReductionSpeed, noiseReductionSpeed);
+                    //noiseArea.transform.localScale -= new Vector3(noiseReductionSpeed, noiseReductionSpeed, noiseReductionSpeed);
+                    noiseArea.transform.localScale *= noiseReductionSpeed;
                 }
                 Debug.Log(noiseArea.transform.localScale.x);
             }
