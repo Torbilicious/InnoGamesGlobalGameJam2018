@@ -28,6 +28,7 @@ namespace Assets.Scripts.Player
         public float jumpForce = 2.0f;
         private Rigidbody rb;
 
+        private bool isLanded = false;
         private bool lastDirection;
         private bool isSneaking;
         private bool isGrounded;
@@ -44,10 +45,21 @@ namespace Assets.Scripts.Player
             jump = new Vector3(0.0f, 2.0f, 0.0f);
 
             Spawn();
+            
+            animator.Play("Player_Fall");
         }
 
         void Update()
         {
+            if (!isLanded && !isGrounded)
+            {
+                return;
+            }
+            else
+            {
+                isLanded = true;
+            }
+            
             if (transform.position.y < deathBarrierY)
             {
                 Die();
@@ -67,44 +79,15 @@ namespace Assets.Scripts.Player
             
             transform.Translate(x, y, 0);
 
-            //Animation
-            if (!isGrounded && !isOnLadder)
+            //Richtung nur updaten wenn man sich bewegt, denn x < 0 ist true wenn x = 0
+            //d.h. Wenn man dies immer updated dreht man sich nach Rechts sobald man stehen bleibt
+            if (Math.Abs(x) > 0)
             {
-                animator.Play("Player_Jump");
+                lastDirection = x < 0;
+                direction = lastDirection ? Direction.LEFT : Direction.RIGHT;
             }
-            else if (Math.Abs(x) > 0)
-            {
-                if (isSneaking)
-                {
-                    animator.Play("Player_Sneaking"); //TODO: Animation fehlt noch
-                }
-                else
-                {
-                    animator.Play("Player_Walking");
-                }
 
-                var isLeftDirection = x < 0;
-                direction = isLeftDirection ? Direction.LEFT : Direction.RIGHT;
-                
-                if (lastDirection != isLeftDirection)
-                {
-                    Vector3 scale = transform.localScale;
-                    scale.x *= -1;
-                    transform.localScale = scale;
-                    lastDirection = isLeftDirection;
-                }
-            }
-            else
-            {
-                if (isSneaking)
-                {
-                    animator.Play("Player_Duck");
-                }
-                else
-                {
-                    animator.Play("Player_Right");
-                }
-            }
+            Animate(x, y);
 
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
@@ -132,13 +115,92 @@ namespace Assets.Scripts.Player
             }
         }
 
+        private void Animate(float x, float y)
+        {
+            animator.enabled = true;
+            
+            if (isOnLadder)
+            {
+                if (y == 0)
+                {
+                    animator.enabled = false;
+                }
+                else if(lastDirection)
+                {
+                    animator.Play("Player_Climb_Left");
+                }
+                else
+                {
+                    animator.Play("Player_Climb");
+                }
+            }
+            else if (Math.Abs(x) > 0)
+            {
+                if (x > 0)
+                {
+                    if (!isGrounded && !isOnLadder)
+                    {
+                        animator.Play("Player_Jump");
+                    }
+                    else if (isSneaking)
+                    {
+                        animator.Play("Player_Sneaking");
+                    }
+                    else
+                    {
+                        animator.Play("Player_Walking");
+                    }
+                }
+                else
+                {
+                    if (!isGrounded && !isOnLadder)
+                    {
+                        animator.Play("Player_Jump_Left");
+                    }
+                    else if (isSneaking)
+                    {
+                        animator.Play("Player_Sneaking_Left");
+                    }
+                    else
+                    {
+                        animator.Play("Player_Walking_Left");
+                    }
+                }
+            }
+            else
+            {
+                if (!lastDirection)
+                {
+                    if (isSneaking)
+                    {
+                        animator.Play("Player_Duck");
+                    }
+                    else
+                    {
+                        animator.Play("Player_Right");
+                    }
+                }
+                else
+                {
+                    if (isSneaking)
+                    {
+                        animator.Play("Player_Duck_Left");
+                    }
+                    else
+                    {
+                        animator.Play("Player_Right_Left");
+                    }
+                }
+            }
+        }
+
         private void ThrowStone()
         {
             Debug.Log("test");
             var temp = Instantiate(stone,
                 new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
 
-            temp.GetComponent<Rigidbody>().AddForce(throwRange, throwRange / 2, 0, ForceMode.Impulse);
+            temp.GetComponent<Rigidbody>().AddForce(direction == Direction.LEFT ? -throwRange : throwRange, throwRange / 2, 0, ForceMode.Impulse);
         }
 
         private void Jump()
