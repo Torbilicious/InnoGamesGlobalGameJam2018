@@ -35,6 +35,7 @@ namespace Assets.Scripts.Player
 
         public Transform stone;
         public float throwRange = 8.0f;
+        private int countStones;
 
         private float mass = 0;
 
@@ -42,7 +43,7 @@ namespace Assets.Scripts.Player
         {
             rb = GetComponent<Rigidbody>();
             jump = new Vector3(0.0f, 2.0f, 0.0f);
-
+            countStones = 0;
             Spawn();
         }
 
@@ -128,17 +129,26 @@ namespace Assets.Scripts.Player
 
             if (CrossPlatformInputManager.GetButtonDown("Fire"))
             {
-                ThrowStone();
+             
+                if (countStones > 0)
+                {
+                    countStones = countStones - 1;
+
+                    ThrowStone();
+                                       
+                }
+              
             }
         }
 
         private void ThrowStone()
         {
-            Debug.Log("test");
-            var temp = Instantiate(stone,
-                new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
-
-            temp.GetComponent<Rigidbody>().AddForce(direction == Direction.LEFT ? -throwRange : throwRange, throwRange / 2, 0, ForceMode.Impulse);
+    
+                var temp = Instantiate(stone,
+                    new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
+                temp.GetComponent<Rigidbody>().AddForce(direction == Direction.LEFT ? -throwRange : throwRange, throwRange / 2, 0, ForceMode.Impulse);
+            Debug.Log(temp);
+     
         }
 
         private void Jump()
@@ -158,7 +168,14 @@ namespace Assets.Scripts.Player
 
             if (other.gameObject.CompareTag("Item"))
             {
-                other.gameObject.SetActive(false);
+                               
+                if (countStones < 3)
+                {
+
+                    other.gameObject.SetActive(false);
+                    countStones = countStones + 1;
+                }
+                
             }
         }
 
