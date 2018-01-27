@@ -24,6 +24,7 @@ namespace Assets.Scripts
 
         private bool lastDirection = false;
         private bool isSneaking = false;
+        private bool isGrounded = false;
 
 
         void Start()
@@ -34,10 +35,6 @@ namespace Assets.Scripts
             jump = new Vector3(0.0f, 2.0f, 0.0f);
 
             spawn();
-        }
-
-        Boolean isGrounded() {
-            return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
         }
 
         void Update()
@@ -51,7 +48,7 @@ namespace Assets.Scripts
             transform.Translate(x, 0, 0);
 
             //Animation
-            if (!isGrounded())
+            if (!isGrounded)
             {
                 animator.Play("Player_Jump");
             }
@@ -101,10 +98,12 @@ namespace Assets.Scripts
                 isSneaking = false;
 
             }
-            if (Input.GetButton("Jump") && isGrounded())
+            if (Input.GetButton("Jump") && isGrounded)
             {
+                rb.velocity = new Vector3(0f,0f,0f); 
+                rb.angularVelocity = new Vector3(0f,0f,0f);
                 rb.AddForce(jump * jumpForce, ForceMode.Impulse);
-//            isGrounded = false;
+                isGrounded = false;
             }
 
             if(noiseArea.transform.localScale.x > 0.5)
@@ -124,14 +123,33 @@ namespace Assets.Scripts
 
         void OnTriggerEnter(Collider other)
         {
+            if (!other.gameObject != this.gameObject)
+            {
+                isGrounded = true;
+            }
+            
             if (other.gameObject.CompareTag("Item"))
             {
                 other.gameObject.SetActive(false);
             }
         }
 
+        private void OnTriggerStay(Collider other)
+        {
+            if (!other.gameObject != this.gameObject)
+            {
+                isGrounded = true;
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            isGrounded = false;
+        }
+
         private void OnCollisionEnter(Collision collision)
         {
+    
             Debug.Log(noiseArea.transform.localScale);
                 noiseArea.transform.localScale += new Vector3(noiseBaseRange, noiseBaseRange, noiseBaseRange) * noiseArea.noiseIntensity * collision.impulse.magnitude;
         }
