@@ -4,17 +4,20 @@ using UnityEngine;
 
 namespace Assets.Scripts.AI
 {
+	[RequireComponent(typeof(Rigidbody))]
 	public class EnemyController : MonoBehaviour
 	{
 		public LamplightController lampLight;
-	
+		
+		public Animator animator;
+		
 		public bool isDead = false;
 		public float baseSpeed = 1.0f;
 	
 	
 		// Use this for initialization
 		void Start () {
-		
+			animator.Play("Enemy_Idle");
 		}
 	
 		// Update is called once per frame
@@ -29,8 +32,13 @@ namespace Assets.Scripts.AI
 		
 			if (lampLight.hasColl)
 			{
+				animator.Play("Enemy_Walking");
 				FollowPlayer();
-			}	
+			}
+			else
+			{
+				animator.Play("Enemy_Idle");
+			}
 		}
 
 		void UpdateDead()
@@ -53,7 +61,9 @@ namespace Assets.Scripts.AI
 			float distanceNorm = Mathf.Clamp(1.0f - (distance / lightSizeX), 0.0f, 1.0f);
 			
 			float realSpeed = baseSpeed * distanceNorm;
+			
 			transform.Translate(new Vector3(realSpeed, 0.0f, 0.0f));
+			animator.speed = (Math.Max(0.1f, distanceNorm)) * 4.0f;
 		}
 	
 		void OnCollisionEnter(Collision other)
