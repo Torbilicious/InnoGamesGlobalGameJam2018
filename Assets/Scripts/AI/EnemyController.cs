@@ -7,6 +7,7 @@ namespace Assets.Scripts.AI
 		public LamplightController lampLight;
 	
 		public bool isDead = false;
+		public float baseSpeed = 1.0f;
 	
 		private const int deadAnimTimeTotal = 60; // total time the death animation takes
 		private int deadAnimTime = 0; // current death animation time
@@ -44,23 +45,22 @@ namespace Assets.Scripts.AI
 				Destroy(gameObject);
 			}
 		}
-	
+		
 		void Die()
 		{
 			isDead = true;
 			deadAnimTime = deadAnimTimeTotal;
 			GetComponent<Collider>().enabled = false;
-			Debug.Log("Enemy Dead!");
-		
-			//Destroy(gameObject);
 		}
-
+	
 		void FollowPlayer()
 		{
 			float lightSizeX = lampLight.GetComponent<Collider>().bounds.size.x;
 			float distance = Mathf.Abs(transform.position.x - FindObjectOfType<PlayerController>().transform.position.x);
 			float distanceNorm = Mathf.Clamp(1.0f - (distance / lightSizeX), 0.0f, 1.0f);
-			Debug.Log(distanceNorm);
+			
+			float realSpeed = baseSpeed * distanceNorm;
+			transform.Translate(new Vector3(realSpeed, 0.0f, 0.0f));
 		}
 	
 		void OnCollisionEnter(Collision other)
