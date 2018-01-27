@@ -88,7 +88,7 @@ namespace Assets.Scripts.Player
             {
                 if (isSneaking)
                 {
-                    animator.Play("Player_Sneaking"); //TODO: Animation fehlt noch
+                    animator.Play("Player_Sneaking");
                 }
                 else
                 {
@@ -101,7 +101,7 @@ namespace Assets.Scripts.Player
                 if (lastDirection != isLeftDirection)
                 {
                     Vector3 scale = transform.localScale;
-                    scale.x *= -1;
+                    //scale.x *= -1;
                     transform.localScale = scale;
                     lastDirection = isLeftDirection;
                 }
