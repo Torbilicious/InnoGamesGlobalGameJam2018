@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
@@ -7,8 +8,7 @@ public class PlayerController : MonoBehaviour
 
     public Vector3 jump;
     public float jumpForce = 2.0f;
-
-    public bool isGrounded;
+    float distToGround;
 
     Rigidbody rb;
 
@@ -17,15 +17,16 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        distToGround = GetComponent<Collider>().bounds.extents.y;
+        
         rb = GetComponent<Rigidbody>();
         jump = new Vector3(0.0f, 2.0f, 0.0f);
 
         respawn();
     }
 
-    void OnCollisionStay()
-    {
-        isGrounded = true;
+    Boolean isGrounded() {
+        return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
     }
 
     void Update()
@@ -48,10 +49,10 @@ public class PlayerController : MonoBehaviour
             movementSpeed = movementSpeed * 2;
         }
 
-        if (Input.GetButton("Jump") && isGrounded)
+        if (Input.GetButton("Jump") && isGrounded())
         {
             rb.AddForce(jump * jumpForce, ForceMode.Impulse);
-            isGrounded = false;
+//            isGrounded = false;
         }
     }
 
