@@ -9,6 +9,9 @@ namespace Assets.Scripts
     {
         public NoiseController noiseArea;
 
+        private float noiseReductionSpeed = 0.9f;
+        private float noiseBaseRange = 2.0f;
+
         public float movementSpeed;
         public Vector3 jump;
         public float deathBarrierY = -40.0f;
@@ -52,13 +55,28 @@ namespace Assets.Scripts
             {
                 movementSpeed = movementSpeed * 2;
                 noiseArea.noiseIntensity = noiseArea.noiseIntensity * 2;
-            }
 
+            }
             if (Input.GetButton("Jump") && isGrounded())
             {
                 rb.AddForce(jump * jumpForce, ForceMode.Impulse);
 //            isGrounded = false;
             }
+
+            if(noiseArea.transform.localScale.x > 0.5)
+            {
+                if(noiseArea.transform.localScale.x < 0.5 )
+                {
+                    return;
+                }
+                else
+                {
+                    noiseArea.transform.localScale -= new Vector3(noiseReductionSpeed, noiseReductionSpeed, noiseReductionSpeed);
+                }
+                Debug.Log(noiseArea.transform.localScale.x);
+            }
+
+
         }
 
         void OnTriggerEnter(Collider other)
@@ -71,7 +89,8 @@ namespace Assets.Scripts
 
         private void OnCollisionEnter(Collision collision)
         {
-                noiseArea.transform.localScale += new Vector3(0.1F, 0.1F, 0.1F) * noiseArea.noiseIntensity;
+            Debug.Log(noiseArea.transform.localScale);
+                noiseArea.transform.localScale += new Vector3(noiseBaseRange, noiseBaseRange, noiseBaseRange) * noiseArea.noiseIntensity * collision.impulse.magnitude;
         }
 
         public void spawn()
