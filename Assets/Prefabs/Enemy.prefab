@@ -187,7 +187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lampLight: {fileID: 114589280665130516}
   isDead: 0
-  baseSpeed: 1
+  baseSpeed: 0.25
 --- !u!114 &114589280665130516
 MonoBehaviour:
   m_ObjectHideFlags: 1
