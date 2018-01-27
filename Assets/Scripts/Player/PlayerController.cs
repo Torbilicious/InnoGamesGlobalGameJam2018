@@ -142,13 +142,11 @@ namespace Assets.Scripts
         private void OnCollisionStay(Collision collision)
         {
             var colProps = collision.gameObject.GetComponent<CollisionProperties>();
-         
-            if (colProps != null && colProps.walkNoise)
+            if (colProps != null)
             {
+              
+                    applyNoise(Math.Abs(Input.GetAxis("Horizontal")));
 
-                Debug.Log(collision.relativeVelocity.magnitude);
-                applyNoise(collision.relativeVelocity.magnitude*100);
-     
             }
             
         }
