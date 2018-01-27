@@ -42,10 +42,10 @@ GameObject:
   - component: {fileID: 4856454770758862}
   - component: {fileID: 212039492215975388}
   - component: {fileID: 135744773458156488}
-  - component: {fileID: 114723780041885252}
+  - component: {fileID: 114610974577958974}
   m_Layer: 0
   m_Name: NoiseArea
-  m_TagString: Untagged
+  m_TagString: NoiseArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -57,7 +57,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1012152265956586}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalPosition: {x: -7.3955383, y: 3.0326886, z: 11.264281}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children:
   - {fileID: 4856454770758862}
@@ -72,7 +72,7 @@ Transform:
   m_GameObject: {fileID: 1970418141465368}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.25}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_Children: []
   m_Father: {fileID: 4683793454037684}
   m_RootOrder: 0
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4da18f90bf66145fb93c8373fb1db838, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noiseArea: {fileID: 114723780041885252}
+  noiseArea: {fileID: 114610974577958974}
   movementSpeed: 3
   jump: {x: 0, y: 0, z: 0}
   deathBarrierY: -40
@@ -152,6 +152,7 @@ MonoBehaviour:
   jumpForce: 2
   stone: {fileID: 4135932514082548, guid: a10e7e67fc9ed7f4588f9ab406780a57, type: 2}
   throwRange: 8
+--- !u!114 &114610974577958974
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -163,7 +164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noiseIntensity: 2
-  noiseReductionSpeed: 0.8
+  noiseReductionSpeed: 0.9
   noiseBaseRange: 2
 --- !u!135 &135744773458156488
 SphereCollider:
@@ -175,7 +176,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2.17
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!212 &212039492215975388
 SpriteRenderer:
