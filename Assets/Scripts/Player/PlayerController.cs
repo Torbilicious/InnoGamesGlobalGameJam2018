@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityStandardAssets.CrossPlatformInput;
@@ -16,6 +16,7 @@ namespace Assets.Scripts.Player
 
         private Direction direction;
         public NoiseController noiseArea;
+        public Transform StoneThrowingPosition;
 
         private float noiseLevel = 1.0f;
 
@@ -36,6 +37,7 @@ namespace Assets.Scripts.Player
 
         public Transform stone;
         public float throwRange = 8.0f;
+        private int countStones;
 
         private float mass = 0;
 
@@ -43,7 +45,7 @@ namespace Assets.Scripts.Player
         {
             rb = GetComponent<Rigidbody>();
             jump = new Vector3(0.0f, 2.0f, 0.0f);
-
+            countStones = 0;
             Spawn();
             
             animator.Play("Player_Fall");
@@ -111,7 +113,15 @@ namespace Assets.Scripts.Player
 
             if (CrossPlatformInputManager.GetButtonDown("Fire"))
             {
-                ThrowStone();
+             
+                if (countStones > 0)
+                {
+                    countStones = countStones - 1;
+
+                    ThrowStone();
+                                       
+                }
+              
             }
         }
 
@@ -188,7 +198,7 @@ namespace Assets.Scripts.Player
                     }
                     else
                     {
-                        animator.Play("Player_Right_Left");
+                        animator.Play("Player_Left");
                     }
                 }
             }
@@ -197,8 +207,7 @@ namespace Assets.Scripts.Player
         private void ThrowStone()
         {
             Debug.Log("test");
-            var temp = Instantiate(stone,
-                new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
+            var temp = Instantiate(stone, StoneThrowingPosition.position, transform.rotation);
 
             temp.GetComponent<Rigidbody>().AddForce(direction == Direction.LEFT ? -throwRange : throwRange, throwRange / 2, 0, ForceMode.Impulse);
         }
@@ -220,7 +229,14 @@ namespace Assets.Scripts.Player
 
             if (other.gameObject.CompareTag("Item"))
             {
-                other.gameObject.SetActive(false);
+                               
+                if (countStones < 3)
+                {
+
+                    other.gameObject.SetActive(false);
+                    countStones = countStones + 1;
+                }
+                
             }
         }
 
@@ -244,7 +260,6 @@ namespace Assets.Scripts.Player
             {
                 isGrounded = false;
             }
-
 
             if (other.gameObject.CompareTag("Ladder"))
             {
