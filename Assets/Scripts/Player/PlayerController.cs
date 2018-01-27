@@ -3,11 +3,18 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityStandardAssets.CrossPlatformInput;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Player
 {
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerController : MonoBehaviour
     {
+        private enum Direction
+        {
+            LEFT,
+            RIGHT
+        }
+
+        private Direction direction;
         public NoiseController noiseArea;
 
         private float noiseLevel = 1.0f;
@@ -19,25 +26,25 @@ namespace Assets.Scripts
         public Animator animator;
 
         public float jumpForce = 2.0f;
-        private float distToGround;
         private Rigidbody rb;
 
         private bool isLanded = false;
-        private bool lastDirection = false;
-        private bool isSneaking = false;
-        private bool isGrounded = false;
-        private bool isOnLadder = false;
+        private bool lastDirection;
+        private bool isSneaking;
+        private bool isGrounded;
+        private bool isOnLadder;
+
+        public Transform stone;
+        public float throwRange = 8.0f;
 
         private float mass = 0;
 
         void Start()
         {
-            distToGround = GetComponent<Collider>().bounds.extents.y;
-
             rb = GetComponent<Rigidbody>();
             jump = new Vector3(0.0f, 2.0f, 0.0f);
 
-            spawn();
+            Spawn();
             
             animator.Play("Player_Fall");
         }
@@ -55,12 +62,12 @@ namespace Assets.Scripts
             
             if (transform.position.y < deathBarrierY)
             {
-                die();
+                Die();
             }
 
             var x = CrossPlatformInputManager.GetAxis("Horizontal") * Time.deltaTime * movementSpeed;
             var y = CrossPlatformInputManager.GetAxis("Vertical") * Time.deltaTime * movementSpeed / 2;
-            
+
             if (isOnLadder)
             {
                 rb.Sleep();
@@ -69,6 +76,8 @@ namespace Assets.Scripts
             {
                 y = 0;
             }
+            
+            transform.Translate(x, y, 0);
 
             //Animation
             if (!isGrounded && !isOnLadder)
@@ -86,13 +95,15 @@ namespace Assets.Scripts
                     animator.Play("Player_Walking");
                 }
 
-                bool direction = x < 0;
-                if (lastDirection != direction)
+                var isLeftDirection = x < 0;
+                direction = isLeftDirection ? Direction.LEFT : Direction.RIGHT;
+                
+                if (lastDirection != isLeftDirection)
                 {
                     Vector3 scale = transform.localScale;
                     scale.x *= -1;
                     transform.localScale = scale;
-                    lastDirection = direction;
+                    lastDirection = isLeftDirection;
                 }
             }
             else
@@ -123,13 +134,31 @@ namespace Assets.Scripts
 
             if ((Input.GetButton("Jump") || CrossPlatformInputManager.GetButtonDown("Jump")) && isGrounded)
             {
-                rb.velocity = new Vector3(0f, 0f, 0f);
-                rb.angularVelocity = new Vector3(0f, 0f, 0f);
-                rb.AddForce(jump * jumpForce, ForceMode.Impulse);
-                isGrounded = false;
+                Jump();
             }
-            
-            transform.Translate(x, y, 0);
+
+
+            if (CrossPlatformInputManager.GetButtonDown("Fire"))
+            {
+                ThrowStone();
+            }
+        }
+
+        private void ThrowStone()
+        {
+            Debug.Log("test");
+            var temp = Instantiate(stone,
+                new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
+
+            temp.GetComponent<Rigidbody>().AddForce(direction == Direction.LEFT ? -throwRange : throwRange, throwRange / 2, 0, ForceMode.Impulse);
+        }
+
+        private void Jump()
+        {
+            rb.velocity = new Vector3(0f, 0f, 0f);
+            rb.angularVelocity = new Vector3(0f, 0f, 0f);
+            rb.AddForce(jump * jumpForce, ForceMode.Impulse);
+            isGrounded = false;
         }
 
         void OnTriggerEnter(Collider other)
@@ -138,7 +167,7 @@ namespace Assets.Scripts
             {
                 isGrounded = true;
             }
-            
+
             if (other.gameObject.CompareTag("Item"))
             {
                 other.gameObject.SetActive(false);
@@ -166,7 +195,7 @@ namespace Assets.Scripts
                 isGrounded = false;
             }
 
-            
+
             if (other.gameObject.CompareTag("Ladder"))
             {
                 isOnLadder = false;
@@ -176,7 +205,7 @@ namespace Assets.Scripts
         private void OnCollisionEnter(Collision collision)
         {
             var colProps = collision.gameObject.GetComponent<CollisionProperties>();
-    
+
             if (colProps != null)
             {
                 noiseLevel = colProps.noiselevel;
@@ -194,21 +223,19 @@ namespace Assets.Scripts
             var colProps = collision.gameObject.GetComponent<CollisionProperties>();
             if (colProps != null)
             {
-                 noiseArea.applyNoise(Math.Abs(Input.GetAxis("Horizontal")));
+                noiseArea.applyNoise(Math.Abs(Input.GetAxis("Horizontal")));
             }
-            
         }
 
-        public void spawn()
+        private void Spawn()
         {
             var spawn = FindObjectOfType<SpawnController>();
             transform.position = spawn.transform.position;
         }
 
-        public void die()
+        public void Die()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
-
     }
 }
