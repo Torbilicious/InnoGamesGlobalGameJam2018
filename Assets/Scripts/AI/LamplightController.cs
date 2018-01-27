@@ -1,31 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class LamplightController : MonoBehaviour
+namespace Assets.Scripts.AI
 {
-	public Rigidbody enemyBody;
-	public EnemyController enemy;
-	
-	public bool hasColl = false;
-	
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
-	private void OnTriggerExit(Collider other)
+	public class LamplightController : MonoBehaviour
 	{
-		hasColl = false;
-	}
+		public Rigidbody enemyBody;
+		public EnemyController enemy;
+	
+		public bool hasColl = false;
+	
+		// Use this for initialization
+		void Start () {
+		
+		}
+	
+		// Update is called once per frame
+		void Update () {
+		
+		}
 
-	private void OnTriggerStay(Collider other)
-	{
-		hasColl = true;
+		private void OnTriggerExit(Collider other)
+		{
+			hasColl = false;
+		}
+
+		private void OnTriggerStay(Collider other)
+		{
+			hasColl = true;
+		}
 	}
 }
