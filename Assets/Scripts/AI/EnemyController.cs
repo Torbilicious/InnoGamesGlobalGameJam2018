@@ -66,8 +66,8 @@ namespace Assets.Scripts.AI
 		void OnCollisionEnter(Collision other)
 		{
 			if (isDead) return;
-		
-			if (other.gameObject.name == "Player")
+
+			if (other.gameObject.CompareTag("Player"))
 			{
 				if (lampLight.hasColl)
 				{
