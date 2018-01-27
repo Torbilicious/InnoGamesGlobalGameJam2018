@@ -8,16 +8,19 @@ namespace Assets.Scripts
 		public Vector3 posOffset = new Vector3(0.0f, -1.2f, 0.0f);
 	
 		private Vector3 lastCamPos;
-		private Transform player;
+		private Transform player = null;
 	
 		// Use this for initialization
 		void Start () {
 			lastCamPos = transform.position;
-			player = GameObject.FindGameObjectWithTag("Player").transform;
 		}
 
 		// Update is called once per frame
 		void Update () {
+			if (player == null)
+			{
+				player = GameObject.FindGameObjectWithTag("Player").transform;
+			}
 			// get player pos. limited to X/Y
 			var newCamPos = player.position;
 			newCamPos.z = lastCamPos.z;
