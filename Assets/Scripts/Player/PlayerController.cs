@@ -188,7 +188,7 @@ namespace Assets.Scripts.Player
                     }
                     else
                     {
-                        animator.Play("Player_Right_Left");
+                        animator.Play("Player_Left");
                     }
                 }
             }
@@ -244,7 +244,6 @@ namespace Assets.Scripts.Player
             {
                 isGrounded = false;
             }
-
 
             if (other.gameObject.CompareTag("Ladder"))
             {
