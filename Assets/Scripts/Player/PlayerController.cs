@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityStandardAssets.CrossPlatformInput;
 
 namespace Assets.Scripts
 {
@@ -19,7 +20,7 @@ namespace Assets.Scripts
         public float deathBarrierY = -40.0f;
 
         public Animator animator;
-    
+
         public float jumpForce = 2.0f;
         private float distToGround;
         private Rigidbody rb;
@@ -32,7 +33,7 @@ namespace Assets.Scripts
         void Start()
         {
             distToGround = GetComponent<Collider>().bounds.extents.y;
-        
+
             rb = GetComponent<Rigidbody>();
             jump = new Vector3(0.0f, 2.0f, 0.0f);
 
@@ -46,7 +47,7 @@ namespace Assets.Scripts
                 spawn();
             }
 
-            var x = Input.GetAxis("Horizontal") * Time.deltaTime * movementSpeed;
+            var x = CrossPlatformInputManager.GetAxis("Horizontal") * Time.deltaTime * movementSpeed;
             transform.Translate(x, 0, 0);
 
             //Animation
@@ -64,7 +65,7 @@ namespace Assets.Scripts
                 {
                     animator.Play("Player_Walking");
                 }
-                
+
                 bool direction = x < 0;
                 if (lastDirection != direction)
                 {
@@ -83,34 +84,34 @@ namespace Assets.Scripts
                 else
                 {
                     animator.Play("Player_Right");
-                }  
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
-                movementSpeed = movementSpeed / 2;
-                noiseArea.noiseIntensity = noiseArea.noiseIntensity / 2;
+                movementSpeed /= 2;
+                noiseArea.noiseIntensity /= 2;
                 isSneaking = true;
             }
 
             if (Input.GetKeyUp(KeyCode.LeftShift))
             {
-                movementSpeed = movementSpeed * 2;
-                noiseArea.noiseIntensity = noiseArea.noiseIntensity * 2;
+                movementSpeed *= 2;
+                noiseArea.noiseIntensity *= 2;
                 isSneaking = false;
-
             }
-            if (Input.GetButton("Jump") && isGrounded)
+
+            if ((Input.GetButton("Jump") || CrossPlatformInputManager.GetButtonDown("Jump")) && isGrounded)
             {
-                rb.velocity = new Vector3(0f,0f,0f); 
-                rb.angularVelocity = new Vector3(0f,0f,0f);
+                rb.velocity = new Vector3(0f, 0f, 0f);
+                rb.angularVelocity = new Vector3(0f, 0f, 0f);
                 rb.AddForce(jump * jumpForce, ForceMode.Impulse);
                 isGrounded = false;
             }
 
-            if(noiseArea.transform.localScale.x > 0.5)
+            if (noiseArea.transform.localScale.x > 0.5)
             {
-                if(noiseArea.transform.localScale.x < 0.5 )
+                if (noiseArea.transform.localScale.x < 0.5)
                 {
                     return;
                 }
@@ -128,8 +129,7 @@ namespace Assets.Scripts
             {
                 isGrounded = true;
             }
-            
-            
+
             if (other.gameObject.CompareTag("Item"))
             {
                 other.gameObject.SetActive(false);
@@ -165,10 +165,11 @@ namespace Assets.Scripts
 
         private void OnCollisionEnter(Collision collision)
         {
-    var colProps = collision.gameObject.GetComponent<CollisionProperties>();
-            if(colProps != null)
+            var colProps = collision.gameObject.GetComponent<CollisionProperties>();
+            if (colProps != null)
             {
-                noiseLevel = colProps.noiselevel;        Debug.Log(colProps.noiselevel);
+                noiseLevel = colProps.noiselevel;
+                Debug.Log(colProps.noiselevel);
             }
             else
             {
@@ -176,7 +177,7 @@ namespace Assets.Scripts
             }
 
             applyNoise(collision.impulse.magnitude);
-              //  noiseArea.transform.localScale += new Vector3(noiseBaseRange, noiseBaseRange, noiseBaseRange) * noiseArea.noiseIntensity * collision.impulse.magnitude* noiseLevel;
+            //  noiseArea.transform.localScale += new Vector3(noiseBaseRange, noiseBaseRange, noiseBaseRange) * noiseArea.noiseIntensity * collision.impulse.magnitude* noiseLevel;
         }
 
         private void OnCollisionStay(Collision collision)
@@ -184,9 +185,7 @@ namespace Assets.Scripts
             var colProps = collision.gameObject.GetComponent<CollisionProperties>();
             if (colProps != null)
             {
-              
-                    applyNoise(Math.Abs(Input.GetAxis("Horizontal")));
-
+                applyNoise(Math.Abs(Input.GetAxis("Horizontal")));
             }
         }
 
@@ -201,9 +200,10 @@ namespace Assets.Scripts
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
-        private void applyNoise (float magnitude)
+        private void applyNoise(float magnitude)
         {
-            noiseArea.transform.localScale += new Vector3(noiseBaseRange, noiseBaseRange, noiseBaseRange) * noiseArea.noiseIntensity * magnitude * noiseLevel;
+            noiseArea.transform.localScale += new Vector3(noiseBaseRange, noiseBaseRange, noiseBaseRange) *
+                                              noiseArea.noiseIntensity * magnitude * noiseLevel;
         }
     }
 }
