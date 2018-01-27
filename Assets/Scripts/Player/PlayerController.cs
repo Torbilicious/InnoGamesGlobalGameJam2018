@@ -16,6 +16,7 @@ namespace Assets.Scripts.Player
 
         private Direction direction;
         public NoiseController noiseArea;
+        public Transform StoneThrowingPosition;
 
         private float noiseLevel = 1.0f;
 
@@ -205,12 +206,10 @@ namespace Assets.Scripts.Player
 
         private void ThrowStone()
         {
-    
-                var temp = Instantiate(stone,
-                    new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
-                temp.GetComponent<Rigidbody>().AddForce(direction == Direction.LEFT ? -throwRange : throwRange, throwRange / 2, 0, ForceMode.Impulse);
-            Debug.Log(temp);
-     
+            Debug.Log("test");
+            var temp = Instantiate(stone, StoneThrowingPosition.position, transform.rotation);
+
+            temp.GetComponent<Rigidbody>().AddForce(direction == Direction.LEFT ? -throwRange : throwRange, throwRange / 2, 0, ForceMode.Impulse);
         }
 
         private void Jump()
