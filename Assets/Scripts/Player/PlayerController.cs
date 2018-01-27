@@ -210,6 +210,7 @@ namespace Assets.Scripts.Player
             var temp = Instantiate(stone, StoneThrowingPosition.position, transform.rotation);
 
             temp.GetComponent<Rigidbody>().AddForce(direction == Direction.LEFT ? -throwRange : throwRange, throwRange / 2, 0, ForceMode.Impulse);
+       
         }
 
         private void Jump()

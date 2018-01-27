@@ -12,5 +12,14 @@ namespace Assets.Scripts.AI
         {
             noiseArea.applyNoise(collision.impulse.magnitude * noise);
         }
+
+        void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("Ground"))
+            {
+                this.gameObject.SetActive(false);
+            }
+
+        }
     }
 }
