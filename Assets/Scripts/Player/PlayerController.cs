@@ -8,6 +8,13 @@ namespace Assets.Scripts
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerController : MonoBehaviour
     {
+        private enum Direction
+        {
+            LEFT,
+            RIGHT
+        }
+
+        private Direction direction;
         public NoiseController noiseArea;
 
         private float noiseLevel = 1.0f;
@@ -51,7 +58,7 @@ namespace Assets.Scripts
 
             var x = CrossPlatformInputManager.GetAxis("Horizontal") * Time.deltaTime * movementSpeed;
             var y = CrossPlatformInputManager.GetAxis("Vertical") * Time.deltaTime * movementSpeed / 2;
-            
+
             if (isOnLadder)
             {
                 rb.Sleep();
@@ -77,13 +84,15 @@ namespace Assets.Scripts
                     animator.Play("Player_Walking");
                 }
 
-                bool direction = x < 0;
-                if (lastDirection != direction)
+                var isLeftDirection = x < 0;
+                direction = isLeftDirection ? Direction.LEFT : Direction.RIGHT;
+                
+                if (lastDirection != isLeftDirection)
                 {
                     Vector3 scale = transform.localScale;
                     scale.x *= -1;
                     transform.localScale = scale;
-                    lastDirection = direction;
+                    lastDirection = isLeftDirection;
                 }
             }
             else
@@ -119,15 +128,16 @@ namespace Assets.Scripts
                 rb.AddForce(jump * jumpForce, ForceMode.Impulse);
                 isGrounded = false;
             }
-            
+
             transform.Translate(x, y, 0);
 
-            if (Input.GetKeyDown(KeyCode.G))
+            if (CrossPlatformInputManager.GetButtonDown("Fire"))
             {
                 Debug.Log("test");
-                var temp = Instantiate(stone, new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
+                var temp = Instantiate(stone,
+                    new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
 
-                temp.GetComponent<Rigidbody>().AddForce(throwRange, throwRange/2, 0, ForceMode.Impulse);
+                temp.GetComponent<Rigidbody>().AddForce(throwRange, throwRange / 2, 0, ForceMode.Impulse);
             }
         }
 
@@ -137,7 +147,7 @@ namespace Assets.Scripts
             {
                 isGrounded = true;
             }
-            
+
             if (other.gameObject.CompareTag("Item"))
             {
                 other.gameObject.SetActive(false);
@@ -165,7 +175,7 @@ namespace Assets.Scripts
                 isGrounded = false;
             }
 
-            
+
             if (other.gameObject.CompareTag("Ladder"))
             {
                 isOnLadder = false;
@@ -175,7 +185,7 @@ namespace Assets.Scripts
         private void OnCollisionEnter(Collision collision)
         {
             var colProps = collision.gameObject.GetComponent<CollisionProperties>();
-    
+
             if (colProps != null)
             {
                 noiseLevel = colProps.noiselevel;
@@ -193,9 +203,8 @@ namespace Assets.Scripts
             var colProps = collision.gameObject.GetComponent<CollisionProperties>();
             if (colProps != null)
             {
-                 noiseArea.applyNoise(Math.Abs(Input.GetAxis("Horizontal")));
+                noiseArea.applyNoise(Math.Abs(Input.GetAxis("Horizontal")));
             }
-            
         }
 
         public void spawn()
@@ -208,6 +217,5 @@ namespace Assets.Scripts
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
-
     }
 }
