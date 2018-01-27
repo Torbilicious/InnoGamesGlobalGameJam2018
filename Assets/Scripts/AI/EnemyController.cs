@@ -1,4 +1,5 @@
 ﻿using System;
+using Assets.Scripts.Player;
 using UnityEngine;
 
 namespace Assets.Scripts.AI
@@ -63,7 +64,7 @@ namespace Assets.Scripts.AI
 			{
 				if (lampLight.hasColl)
 				{
-					FindObjectOfType<PlayerController>().die();
+					FindObjectOfType<PlayerController>().Die();
 				} else {
 					Die();
 				}
