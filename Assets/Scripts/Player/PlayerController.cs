@@ -7,6 +7,8 @@ namespace Assets.Scripts
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerController : MonoBehaviour
     {
+        public NoiseController noiseArea;
+
         public float movementSpeed;
         public Vector3 jump;
         public float deathBarrierY = -40.0f;
@@ -63,6 +65,19 @@ namespace Assets.Scripts
             {
                 other.gameObject.SetActive(false);
             }
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            //if (collision.gameObject.CompareTag("Ground"))
+            //{
+            //if(noiseArea.gameObject.name != noiseArea.name)
+           
+                noiseArea.transform.localScale += new Vector3(0.1F, 0.1F, 0.1F) * noiseArea.noiseIntensity;
+            
+                Debug.Log(noiseArea.gameObject.name);
+
+            //}
         }
 
         public void spawn()
