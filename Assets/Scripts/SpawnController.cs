@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
 
-public class SpawnController : MonoBehaviour {
+namespace Assets.Scripts
+{
+	public class SpawnController : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		SpawnController spawnController = FindObjectOfType<SpawnController>();
+		// Use this for initialization
+		void Start () {
+			SpawnController spawnController = FindObjectOfType<SpawnController>();
 		
 //		Create
 		
-		transform.position = spawnController.transform.position;
+			transform.position = spawnController.transform.position;
+		}
 	}
 }

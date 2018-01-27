@@ -1,72 +1,79 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-[RequireComponent(typeof(Rigidbody))]
-public class PlayerController : MonoBehaviour
+namespace Assets.Scripts
 {
-    public float movementSpeed;
-
-    public Vector3 jump;
-    public float jumpForce = 2.0f;
-    float distToGround;
-
-    Rigidbody rb;
-
-    public float deathBarrierY = -40.0f;
-
-
-    void Start()
+    [RequireComponent(typeof(Rigidbody))]
+    public class PlayerController : MonoBehaviour
     {
-        distToGround = GetComponent<Collider>().bounds.extents.y;
+        public float movementSpeed;
+        public Vector3 jump;
+        public float deathBarrierY = -40.0f;
+    
+        public float jumpForce = 2.0f;
+        private float distToGround;
+        private Rigidbody rb;
+
+
+        void Start()
+        {
+            distToGround = GetComponent<Collider>().bounds.extents.y;
         
-        rb = GetComponent<Rigidbody>();
-        jump = new Vector3(0.0f, 2.0f, 0.0f);
+            rb = GetComponent<Rigidbody>();
+            jump = new Vector3(0.0f, 2.0f, 0.0f);
 
-        respawn();
-    }
-
-    Boolean isGrounded() {
-        return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
-    }
-
-    void Update()
-    {
-        if (transform.position.y < deathBarrierY)
-        {
-            respawn();
+            spawn();
         }
 
-        var x = Input.GetAxis("Horizontal") * Time.deltaTime * movementSpeed;
-        transform.Translate(x, 0, 0);
-
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            movementSpeed = movementSpeed / 2;
+        Boolean isGrounded() {
+            return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
         }
 
-        if (Input.GetKeyUp(KeyCode.LeftShift))
+        void Update()
         {
-            movementSpeed = movementSpeed * 2;
-        }
+            if (transform.position.y < deathBarrierY)
+            {
+                spawn();
+            }
 
-        if (Input.GetButton("Jump") && isGrounded())
-        {
-            rb.AddForce(jump * jumpForce, ForceMode.Impulse);
+            var x = Input.GetAxis("Horizontal") * Time.deltaTime * movementSpeed;
+            transform.Translate(x, 0, 0);
+
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                movementSpeed = movementSpeed / 2;
+            }
+
+            if (Input.GetKeyUp(KeyCode.LeftShift))
+            {
+                movementSpeed = movementSpeed * 2;
+            }
+
+            if (Input.GetButton("Jump") && isGrounded())
+            {
+                rb.AddForce(jump * jumpForce, ForceMode.Impulse);
 //            isGrounded = false;
+            }
         }
-    }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Item"))
+        void OnTriggerEnter(Collider other)
         {
-            other.gameObject.SetActive(false);
+            if (other.gameObject.CompareTag("Item"))
+            {
+                other.gameObject.SetActive(false);
+            }
         }
-    }
 
-    public void respawn()
-    {
-        var spawn = FindObjectOfType<SpawnController>();
-        transform.position = spawn.transform.position;
+        public void spawn()
+        {
+            var spawn = FindObjectOfType<SpawnController>();
+            transform.position = spawn.transform.position;
+        }
+
+        public void die()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 }
