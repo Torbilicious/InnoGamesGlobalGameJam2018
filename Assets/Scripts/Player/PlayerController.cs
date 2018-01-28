@@ -35,6 +35,8 @@ namespace Assets.Scripts.Player
         private bool isGrounded;
         private bool isOnLadder;
         private bool isHanging = false;
+        private bool isThrowing = false;
+        private float throwT = 0.5f;
 
         public Transform stone;
         public float throwRange = 8.0f;
@@ -79,6 +81,11 @@ namespace Assets.Scripts.Player
             {
                 y = 0;
             }
+            if (isThrowing)
+            {
+                x = 0;
+                y = 0;
+            }
             
             transform.Translate(x, y, 0);
 
@@ -117,8 +124,8 @@ namespace Assets.Scripts.Player
                 if (countStones > 0)
                 {
                     countStones = countStones - 1;
-
-                    ThrowStone();
+                    isThrowing = true;
+                    throwT = 0.75f;
                 }
             }
         }
@@ -126,8 +133,28 @@ namespace Assets.Scripts.Player
         private void Animate(float x, float y)
         {
             animator.enabled = true;
-            
-            if (isOnLadder)
+
+            if (isThrowing && throwT > 0)
+            {
+                throwT -= Time.fixedDeltaTime;
+
+                if (throwT <= 0)
+                {
+                    isThrowing = false;
+                    ThrowStone();
+                }
+                
+                if (lastDirection)
+                {
+                    
+                    animator.Play("Player_Throw_Left");
+                }
+                else
+                {
+                    animator.Play("Player_Throw");
+                }
+            }
+            else if (isOnLadder)
             {
                 if (Math.Abs(y) < 0.01f)
                 {
