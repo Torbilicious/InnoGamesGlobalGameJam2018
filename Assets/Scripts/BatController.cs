@@ -5,10 +5,12 @@ using UnityEngine;
 public class BatController : MonoBehaviour
 {
 	private float x = 0.5f, y = 0.5f;
+	private float sound;
 	
 	// Use this for initialization
 	void Start () {
 		Random.InitState(83495903);
+		sound = Random.Range(5, 20);
 	}
 	
 	// Update is called once per frame
@@ -25,5 +27,14 @@ public class BatController : MonoBehaviour
 		}
 		
 		transform.Translate(x * Time.fixedDeltaTime, y * Time.fixedDeltaTime, 0);
+
+		sound -= Time.fixedDeltaTime;
+
+		if (sound <= 0)
+		{
+			sound = Random.Range(5, 20);
+		
+			GetComponent<AudioSource>().Play();
+		}
 	}
 }

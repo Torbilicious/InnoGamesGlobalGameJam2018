@@ -22,6 +22,7 @@ namespace Assets.Scripts.AI
                     GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
                     transform.Translate(new Vector3(0.0f, 0.0f, -0.2f));
                     isActive = false;
+                    GetComponent<AudioSource>().Play();
                 }
             }
         }
@@ -30,7 +31,8 @@ namespace Assets.Scripts.AI
         {
             if (other.gameObject.CompareTag("Ground"))
             {
-                this.gameObject.SetActive(false);
+                //this.gameObject.SetActive(false);
+                GetComponent<AudioSource>().Play();
             }
 
         }
