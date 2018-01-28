@@ -26,6 +26,8 @@ namespace Assets.Scripts.AI
 		public int followTimeout = 0;
 
 		public Direction direction;
+
+		public Boolean isFollowing;
 		
 		// Use this for initialization
 		void Start ()
@@ -37,6 +39,8 @@ namespace Assets.Scripts.AI
 		// Update is called once per frame
 		void Update ()
 		{
+			isFollowing = lampLight.hasColl || followNoise;
+			
 			// can be re-used if a death animation is used
 			if (isDead) 
 			{
@@ -44,7 +48,7 @@ namespace Assets.Scripts.AI
 				return; // don't do anything if the enemy is dead
 			}
 		
-			if (lampLight.hasColl || followNoise || followTimeout > 0)
+			if (isFollowing || followTimeout > 0)
 			{
 				if (followTimeout > 0)
 				{
