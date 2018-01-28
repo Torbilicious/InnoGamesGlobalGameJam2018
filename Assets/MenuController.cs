@@ -121,7 +121,7 @@ public class MenuController : MonoBehaviour {
     public void LoadScene()
     {
         Debug.Log("Load Scene 1");
-        SceneManager.LoadScene("Level1", LoadSceneMode.Single);
+        SceneManager.LoadScene("Intro", LoadSceneMode.Single);
     }
 
     public void LoadCredits()

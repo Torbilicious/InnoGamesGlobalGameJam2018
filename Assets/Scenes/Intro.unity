@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4465785, g: 0.49641252, b: 0.574817, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465934, g: 0.49642956, b: 0.5748249, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -88,6 +88,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
+    m_ShowResolutionOverlay: 1
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -291,7 +292,7 @@ VideoPlayer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 801885285}
   m_Enabled: 1
-  m_VideoClip: {fileID: 0}
+  m_VideoClip: {fileID: 32900000, guid: 12fac15b8d5ed40af840435263be9e5e, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
@@ -304,12 +305,14 @@ VideoPlayer:
   m_DataSource: 0
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 1
-  m_TargetAudioSources: []
-  m_DirectAudioVolumes: []
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
   m_Url: 
-  m_EnabledAudioTracks: 
-  m_DirectAudioMutes: 
-  m_ControlledAudioTrackCount: 0
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
   m_PlayOnAwake: 1
   m_SkipOnDrop: 1
   m_Looping: 0
@@ -420,13 +423,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1093875813}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: -0.7071068, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 211}
   m_LocalScale: {x: 16, y: 9, z: 9}
   m_Children: []
   m_Father: {fileID: 86020337}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -270, y: -180, z: 0}
 --- !u!23 &1093875815
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -641,3 +644,89 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1910856640
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1910856644}
+  - component: {fileID: 1910856643}
+  - component: {fileID: 1910856642}
+  - component: {fileID: 1910856641}
+  m_Layer: 0
+  m_Name: Plane
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &1910856641
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1910856640}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 2100000, guid: ebd82879dc5304431b3c99cb0b20028a, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!64 &1910856642
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1910856640}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!33 &1910856643
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1910856640}
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1910856644
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1910856640}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -4.151726, y: 2.2716384, z: 332}
+  m_LocalScale: {x: 63.4, y: 1, z: 33.22}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
