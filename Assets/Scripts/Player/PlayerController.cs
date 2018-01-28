@@ -38,6 +38,7 @@ namespace Assets.Scripts.Player
         private bool isHanging = false;
         private bool isThrowing = false;
         private float throwT = 0.5f;
+        private float soundP = 0.0f;
 
         public Transform stone;
         public float throwRange = 8.0f;
@@ -189,10 +190,12 @@ namespace Assets.Scripts.Player
                     else if (isSneaking)
                     {
                         animator.Play("Player_Sneaking");
+                        PlayWalking(true);
                     }
                     else
                     {
                         animator.Play("Player_Walking");
+                        PlayWalking(false);
                     }
                 }
                 else
@@ -204,10 +207,12 @@ namespace Assets.Scripts.Player
                     else if (isSneaking)
                     {
                         animator.Play("Player_Sneaking_Left");
+                        PlayWalking(true);
                     }
                     else
                     {
                         animator.Play("Player_Walking_Left");
+                        PlayWalking(false);
                     }
                 }
             }
@@ -235,6 +240,19 @@ namespace Assets.Scripts.Player
                         animator.Play("Player_Left");
                     }
                 }
+            }
+        }
+
+        private void PlayWalking(bool sneaking)
+        {
+            soundP -= Time.fixedDeltaTime;
+
+            if (soundP <= 0)
+            {
+                var list = GetComponents<AudioSource>();
+                int r = UnityEngine.Random.Range(0, list.Length);
+                list[r].Play();
+                soundP = sneaking ? 0.5f : 0.3f;
             }
         }
 
