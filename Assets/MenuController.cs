@@ -76,7 +76,7 @@ public class MenuController : MonoBehaviour {
                     LoadCredits();
                     break;
                 case 3:
-
+                    LoadControls();
                     break;
                 default:
                     LoadScene();
@@ -127,5 +127,10 @@ public class MenuController : MonoBehaviour {
     public void LoadCredits()
     {
         SceneManager.LoadScene("Credits", LoadSceneMode.Single);
+    }
+
+    public void LoadControls()
+    {
+        SceneManager.LoadScene("Controls", LoadSceneMode.Single);
     }
 }
