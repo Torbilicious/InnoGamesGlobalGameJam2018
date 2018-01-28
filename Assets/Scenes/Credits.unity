@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 172385596}
   - component: {fileID: 172385595}
   - component: {fileID: 172385594}
+  - component: {fileID: 172385593}
   m_Layer: 5
   m_Name: CreditCanvas
   m_TagString: Untagged
@@ -131,6 +132,17 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &172385593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 172385592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67a29fc6eecefae4f8bd4a1fe6cd28a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &172385594
 MonoBehaviour:
   m_ObjectHideFlags: 0
