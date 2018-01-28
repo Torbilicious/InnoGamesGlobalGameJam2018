@@ -114,10 +114,10 @@ namespace Assets.Scripts.Player
                 noiseArea.noiseIntensity *= 2;
                 isSneaking = false;
             }
-            if ((Input.GetButton("Back") || CrossPlatformInputManager.GetButtonDown("Back")) && isGrounded)
-            {
-                SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
-            }
+//            if ((Input.GetButton("Back") || CrossPlatformInputManager.GetButtonDown("Back")) && isGrounded)
+//            {
+//                SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+//            }
 
 
             if ((Input.GetButton("Jump") || CrossPlatformInputManager.GetButtonDown("Jump")) && isGrounded)

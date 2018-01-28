@@ -6,7 +6,7 @@ namespace Assets.Scripts
 {
     public class IntroController : MonoBehaviour
     {
-        private float waitTime = 0.5f;
+        private float waitTime = 1.0f;
 
         void Update()
         {
