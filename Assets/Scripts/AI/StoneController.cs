@@ -25,5 +25,14 @@ namespace Assets.Scripts.AI
                 }
             }
         }
+
+        void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("Ground"))
+            {
+                this.gameObject.SetActive(false);
+            }
+
+        }
     }
 }

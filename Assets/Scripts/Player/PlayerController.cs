@@ -91,14 +91,14 @@ namespace Assets.Scripts.Player
 
             Animate(x, y);
 
-            if (Input.GetKeyDown(KeyCode.LeftShift))
+            if (CrossPlatformInputManager.GetButtonDown("Sneak"))
             {
                 movementSpeed /= 2;
                 noiseArea.noiseIntensity /= 2;
                 isSneaking = true;
             }
 
-            if (Input.GetKeyUp(KeyCode.LeftShift))
+            if (CrossPlatformInputManager.GetButtonUp("Sneak"))
             {
                 movementSpeed *= 2;
                 noiseArea.noiseIntensity *= 2;
@@ -113,15 +113,12 @@ namespace Assets.Scripts.Player
 
             if (CrossPlatformInputManager.GetButtonDown("Fire"))
             {
-             
                 if (countStones > 0)
                 {
                     countStones = countStones - 1;
 
                     ThrowStone();
-                                       
                 }
-              
             }
         }
 
@@ -131,7 +128,7 @@ namespace Assets.Scripts.Player
             
             if (isOnLadder)
             {
-                if (y == 0)
+                if (Math.Abs(y) < 0.01f)
                 {
                     animator.enabled = false;
                 }
@@ -210,6 +207,7 @@ namespace Assets.Scripts.Player
             var temp = Instantiate(stone, StoneThrowingPosition.position, transform.rotation);
 
             temp.GetComponent<Rigidbody>().AddForce(direction == Direction.LEFT ? -throwRange : throwRange, throwRange / 2, 0, ForceMode.Impulse);
+       
         }
 
         private void Jump()
