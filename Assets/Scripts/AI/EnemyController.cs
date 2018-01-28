@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using Assets.Scripts.Player;
+using NUnit.Framework.Constraints;
 using UnityEngine;
 
 namespace Assets.Scripts.AI
@@ -8,8 +9,13 @@ namespace Assets.Scripts.AI
 	[RequireComponent(typeof(Rigidbody))]
 	public class EnemyController : MonoBehaviour
 	{
-		public LamplightController lampLight;
+		public enum Direction
+		{
+			LEFT,
+			RIGHT
+		}
 		
+		public LamplightController lampLight;
 		public Animator animator;
 		
 		public bool isDead = false;
@@ -20,10 +26,13 @@ namespace Assets.Scripts.AI
 		public bool followNoise = false;
 		public float followPosX = 0.0f;
 		public int followTimeout = 0;
-	
+
+		public Direction direction;
+		
 		// Use this for initialization
-		void Start () {
-			animator.Play("Enemy_Idle");
+		void Start ()
+		{
+			SetDirection(direction, false, true);
 			spawnPosX = transform.position.x;
 		}
 	
@@ -48,17 +57,21 @@ namespace Assets.Scripts.AI
 						followPosX = spawnPosX;
 					}
 				}
-				
-				if (lampLight.hasColl)
+				else
 				{
-					followNoise = false;
-					updatePlayerPos();
-				}
+					if (lampLight.hasColl)
+					{
+						followNoise = false;
+						updatePlayerPos();
+					}
 
-				animator.Play("Enemy_Walking");
-				FollowPos(followPosX);
-			} else {
-				animator.Play("Enemy_Idle");
+					//animator.Play((direction == Direction.RIGHT) ? "Enemy_Walking" : "Enemy_Walking_Left");
+					SetDirection(direction, true, true);
+					FollowPos(followPosX);
+				}
+			} else
+			{
+				SetDirection(direction, followNoise, true);
 			}
 		}
 
@@ -70,6 +83,7 @@ namespace Assets.Scripts.AI
 		void UpdateDead()
 		{
 			//Destroy(gameObject);
+			animator.Play(direction == Direction.LEFT ? "Enemy_Die_Left" : "Enemy_Die");
 		}
 		
 		void Die()
@@ -79,12 +93,36 @@ namespace Assets.Scripts.AI
 			GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 			transform.Translate(new Vector3(0.0f, 0.0f, -0.2f));
 		}
-	
+
+		void SetDirection(Direction dir, bool walking = false, bool force = false)
+		{
+			if (force || direction != dir)
+			{
+				direction = dir;
+
+				Vector3 lampPos = lampLight.transform.position;
+				float lampWidth = lampLight.GetComponent<Collider>().bounds.extents.x;
+				float lampOffset = 0.6f;
+				
+				if (direction == Direction.LEFT)
+				{
+					animator.Play(walking ? "Enemy_Walking_Left" : "Enemy_Idle_Left");
+					lampPos.x = transform.position.x - (lampWidth + lampOffset);
+				} else {
+					animator.Play(walking ? "Enemy_Walking" : "Enemy_Idle");
+					lampPos.x = transform.position.x + (lampWidth + lampOffset);
+				}
+				
+				lampLight.transform.position = lampPos;
+			}
+		}
+		
 		void FollowPos(float posX)
 		{
 			float lightSizeX = lampLight.GetComponent<Collider>().bounds.size.x;
 			float distance = Mathf.Abs((float)transform.position.x - posX);
 			float distanceNorm = Mathf.Clamp(1.0f - (distance / lightSizeX), 0.0f, 1.0f);
+			distanceNorm = Math.Max(0.125f, distanceNorm);
 			
 			if (followNoise)
 			{
@@ -92,11 +130,14 @@ namespace Assets.Scripts.AI
 			}
 			
 			float realSpeed = baseSpeed * distanceNorm;
+			float walkDirection = Math.Sign(posX - transform.position.x);
 			
-			transform.Translate(new Vector3(realSpeed, 0.0f, 0.0f));
+			SetDirection(walkDirection > 0 ? Direction.RIGHT : Direction.LEFT, true);
+			
+			transform.Translate(new Vector3(realSpeed * walkDirection, 0.0f, 0.0f));
 			animator.speed = (Math.Max(0.1f, distanceNorm)) * 4.0f;
-
-			if (distance <= 0.001)
+			
+			if (distance <= 0.1)
 			{
 				followNoise = false;
 				
@@ -108,7 +149,7 @@ namespace Assets.Scripts.AI
 		void OnCollisionEnter(Collision other)
 		{
 			if (isDead) return;
-
+			
 			if (other.gameObject.CompareTag("Player"))
 			{
 				if (lampLight.hasColl)
@@ -124,9 +165,9 @@ namespace Assets.Scripts.AI
 		{
 			if (other.gameObject.CompareTag("NoiseArea"))
 			{
-				updatePlayerPos();
+				followPosX = other.gameObject.transform.position.x;		
 				followNoise = true;
-			}
+			} 
 		}
 	}
 }

@@ -72,7 +72,7 @@ Transform:
   m_GameObject: {fileID: 1422367735047200}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_Children: []
   m_Father: {fileID: 4135932514082548}
   m_RootOrder: 0
@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noiseArea: {fileID: 114705650640121004}
-  noise: 2
+  noise: 4
 --- !u!135 &135460429925529388
 SphereCollider:
   m_ObjectHideFlags: 1
