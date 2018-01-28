@@ -121,7 +121,7 @@ namespace Assets.Scripts.Player
 
             if (CrossPlatformInputManager.GetButtonDown("Fire"))
             {
-                if (countStones > 0)
+                if (countStones > 0 && !isThrowing)
                 {
                     countStones = countStones - 1;
                     isThrowing = true;
@@ -259,6 +259,16 @@ namespace Assets.Scripts.Player
             if (other.gameObject.CompareTag("Ground"))
             {
                 isGrounded = true;
+            }
+            
+            if (other.gameObject.CompareTag("Chest"))
+            {
+                ChestController c = other.gameObject.GetComponent<ChestController>();
+                if (!c.IsOpen)
+                {
+                    c.IsOpen = true;
+                    countStones += 3;
+                }
             }
 
             if (other.gameObject.CompareTag("Item"))
