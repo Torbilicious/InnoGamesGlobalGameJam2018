@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Security.Cryptography;
 using Assets.Scripts.Player;
-using NUnit.Framework.Constraints;
 using UnityEngine;
 
 namespace Assets.Scripts.AI

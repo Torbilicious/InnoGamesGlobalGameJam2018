@@ -255,6 +255,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4da18f90bf66145fb93c8373fb1db838, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stonesZeroImage: {fileID: 0}
+  stonesOneImage: {fileID: 0}
+  stonesTwoImage: {fileID: 0}
+  stonesThreeImage: {fileID: 0}
   noiseArea: {fileID: 114610974577958974}
   StoneThrowingPosition: {fileID: 4479990892921128}
   movementSpeed: 3

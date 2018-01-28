@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityStandardAssets.CrossPlatformInput;
 
 namespace Assets.Scripts.Player
@@ -55,7 +56,7 @@ namespace Assets.Scripts.Player
         }
 
         void Update()
-        {
+        {            
             if (!isLanded && !isGrounded)
             {
                 return;
