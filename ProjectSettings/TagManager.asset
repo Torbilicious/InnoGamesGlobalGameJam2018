@@ -9,6 +9,8 @@ TagManager:
   - NoiseArea
   - Ladder
   - Stone
+  - Hang
+  - Chest
   layers:
   - Default
   - TransparentFX

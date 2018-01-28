@@ -34,6 +34,9 @@ namespace Assets.Scripts.Player
         private bool isSneaking;
         private bool isGrounded;
         private bool isOnLadder;
+        private bool isHanging = false;
+        private bool isThrowing = false;
+        private float throwT = 0.5f;
 
         public Transform stone;
         public float throwRange = 8.0f;
@@ -70,12 +73,17 @@ namespace Assets.Scripts.Player
             var x = CrossPlatformInputManager.GetAxis("Horizontal") * Time.deltaTime * movementSpeed;
             var y = CrossPlatformInputManager.GetAxis("Vertical") * Time.deltaTime * movementSpeed / 2;
 
-            if (isOnLadder)
+            if (isOnLadder || isHanging)
             {
                 rb.Sleep();
             }
             else
             {
+                y = 0;
+            }
+            if (isThrowing)
+            {
+                x = 0;
                 y = 0;
             }
             
@@ -113,11 +121,11 @@ namespace Assets.Scripts.Player
 
             if (CrossPlatformInputManager.GetButtonDown("Fire"))
             {
-                if (countStones > 0)
+                if (countStones > 0 && !isThrowing)
                 {
                     countStones = countStones - 1;
-
-                    ThrowStone();
+                    isThrowing = true;
+                    throwT = 0.75f;
                 }
             }
         }
@@ -125,8 +133,28 @@ namespace Assets.Scripts.Player
         private void Animate(float x, float y)
         {
             animator.enabled = true;
-            
-            if (isOnLadder)
+
+            if (isThrowing && throwT > 0)
+            {
+                throwT -= Time.fixedDeltaTime;
+
+                if (throwT <= 0)
+                {
+                    isThrowing = false;
+                    ThrowStone();
+                }
+                
+                if (lastDirection)
+                {
+                    
+                    animator.Play("Player_Throw_Left");
+                }
+                else
+                {
+                    animator.Play("Player_Throw");
+                }
+            }
+            else if (isOnLadder)
             {
                 if (Math.Abs(y) < 0.01f)
                 {
@@ -141,6 +169,14 @@ namespace Assets.Scripts.Player
                     animator.Play("Player_Climb");
                 }
             }
+            else if (isHanging)
+            {
+                animator.Play("Player_Hanging");
+                if (Math.Abs(x) < 0.01f)
+                {
+                    animator.enabled = false;
+                }
+            }
             else if (Math.Abs(x) > 0)
             {
                 if (x > 0)
@@ -148,7 +184,7 @@ namespace Assets.Scripts.Player
                     if (!isGrounded && !isOnLadder)
                     {
                         animator.Play("Player_Jump");
-                    }
+                    }                      
                     else if (isSneaking)
                     {
                         animator.Play("Player_Sneaking");
@@ -224,6 +260,16 @@ namespace Assets.Scripts.Player
             {
                 isGrounded = true;
             }
+            
+            if (other.gameObject.CompareTag("Chest"))
+            {
+                ChestController c = other.gameObject.GetComponent<ChestController>();
+                if (!c.IsOpen)
+                {
+                    c.IsOpen = true;
+                    countStones += 3;
+                }
+            }
 
             if (other.gameObject.CompareTag("Item"))
             {      
@@ -245,8 +291,12 @@ namespace Assets.Scripts.Player
 
             if (other.gameObject.CompareTag("Ladder"))
             {
-                Debug.Log("LADDER");
                 isOnLadder = true;
+            }
+            
+            if (other.gameObject.CompareTag("Hang"))
+            {
+                isHanging = true;
             }
         }
 
@@ -260,6 +310,11 @@ namespace Assets.Scripts.Player
             if (other.gameObject.CompareTag("Ladder"))
             {
                 isOnLadder = false;
+            }
+            
+            if (other.gameObject.CompareTag("Hang"))
+            {
+                isHanging = false;
             }
         }
 
