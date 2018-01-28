@@ -10,6 +10,7 @@ TagManager:
   - Ladder
   - Stone
   - Hang
+  - Chest
   layers:
   - Default
   - TransparentFX
