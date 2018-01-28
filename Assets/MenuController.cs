@@ -13,7 +13,7 @@ public class MenuController : MonoBehaviour {
     public Sprite Credits;
     public Sprite Controls;
 
-    public float waitTime = 0.5f;
+    public float waitTime = 0.7f;
     private float currentWaitTime = 0;
 
     private int position = 0;
@@ -76,7 +76,7 @@ public class MenuController : MonoBehaviour {
                     LoadCredits();
                     break;
                 case 3:
-                    LoadControls();
+                    //LoadControls();
                     break;
                 default:
                     LoadScene();
