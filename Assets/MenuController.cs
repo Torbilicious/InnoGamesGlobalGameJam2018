@@ -73,7 +73,7 @@ public class MenuController : MonoBehaviour {
                     Application.Quit();
                     break;
                 case 2:
-              
+                    LoadCredits();
                     break;
                 case 3:
 
@@ -122,5 +122,10 @@ public class MenuController : MonoBehaviour {
     {
         Debug.Log("Load Scene 1");
         SceneManager.LoadScene("Level1", LoadSceneMode.Single);
+    }
+
+    public void LoadCredits()
+    {
+        SceneManager.LoadScene("Credits", LoadSceneMode.Single);
     }
 }
